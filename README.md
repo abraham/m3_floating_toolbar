@@ -1,6 +1,6 @@
 # M3 Floating Toolbar
 
-A Flutter package that provides a Material Design 3 floating pill-style toolbar widget. Perfect for creating action bars with icon-only or labeled buttons that follow Material You design principles.
+A Flutter package that provides a Material Design 3 [floating pill-style toolbar](https://m3.material.io/components/toolbars/overview) widget. Perfect for creating action bars with icon-only or labeled buttons that follow Material You design principles.
 
 ## Features
 
@@ -10,6 +10,8 @@ A Flutter package that provides a Material Design 3 floating pill-style toolbar 
 - 🎯 Optional FloatingActionButton integration
 - ⚙️ Customizable elevation, padding, spacing, and colors
 - 📱 Responsive layout that adapts to content
+
+[![example screenshot](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot.png)](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot.png)
 
 ## Getting started
 
