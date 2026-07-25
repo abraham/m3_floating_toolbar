@@ -124,6 +124,7 @@ class _M3FloatingToolbarThemeColorsPreview extends StatefulWidget {
 class _M3FloatingToolbarThemeColorsPreviewState
     extends State<_M3FloatingToolbarThemeColorsPreview> {
   Color _seedColor = _kPreviewThemeColors.first.color;
+  M3FloatingToolbarVariant _variant = M3FloatingToolbarVariant.vibrant;
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +138,22 @@ class _M3FloatingToolbarThemeColorsPreviewState
           ],
         ),
         const SizedBox(height: 16),
+        SegmentedButton<M3FloatingToolbarVariant>(
+          segments: const [
+            ButtonSegment(
+              value: M3FloatingToolbarVariant.standard,
+              label: Text('Standard'),
+            ),
+            ButtonSegment(
+              value: M3FloatingToolbarVariant.vibrant,
+              label: Text('Vibrant'),
+            ),
+          ],
+          selected: {_variant},
+          onSelectionChanged: (selection) =>
+              setState(() => _variant = selection.first),
+        ),
+        const SizedBox(height: 16),
         Theme(
           data: ThemeData(
             colorScheme: ColorScheme.fromSeed(
@@ -145,7 +162,7 @@ class _M3FloatingToolbarThemeColorsPreviewState
             ),
           ),
           child: M3FloatingToolbar(
-            variant: M3FloatingToolbarVariant.vibrant,
+            variant: _variant,
             actions: [
               M3FloatingToolbarAction(
                 icon: Icons.home,
