@@ -4,6 +4,11 @@ import 'package:m3_floating_toolbar/m3_floating_toolbar_action.dart';
 /// Material Design 3 floating toolbar container height.
 const double _kContainerHeight = 64;
 
+/// Material Design 3 floating toolbar container elevation.
+///
+/// Floating toolbars are elevated by default.
+const double _kContainerElevation = 1;
+
 /// Material Design 3 floating toolbar spacing between the toolbar and an
 /// adjacent floating action button.
 const double _kToolbarToFabGap = 8;
@@ -76,7 +81,7 @@ class M3FloatingToolbar extends StatelessWidget {
     required this.actions,
     this.direction = Axis.horizontal,
     this.variant = M3FloatingToolbarVariant.standard,
-    this.elevation,
+    this.elevation = _kContainerElevation,
     this.internalPadding = const EdgeInsets.all(8),
     this.spacing = 4,
     this.color,
@@ -97,8 +102,10 @@ class M3FloatingToolbar extends StatelessWidget {
 
   /// Elevation of the toolbar container.
   ///
-  /// Defaults to 0, or 1 when a [floatingActionButton] is provided.
-  final double? elevation;
+  /// Floating toolbars are elevated by default, per the Material Design 3
+  /// specs. Set this to 0 when the content beneath the toolbar is already
+  /// visually distinct.
+  final double elevation;
 
   /// Internal padding inside the toolbar (default: 8 on all sides)
   final EdgeInsets internalPadding;
@@ -146,8 +153,6 @@ class M3FloatingToolbar extends StatelessWidget {
 
     final backgroundColor = color ?? _containerColor(colorScheme);
     final textColor = foregroundColor ?? _contentColor(colorScheme);
-    final resolvedElevation =
-        elevation ?? (floatingActionButton == null ? 0.0 : 1.0);
     final isHorizontal = direction == Axis.horizontal;
 
     final children = <Widget>[
@@ -163,7 +168,7 @@ class M3FloatingToolbar extends StatelessWidget {
 
     final toolbarWidget = Material(
       key: toolbarKey,
-      elevation: resolvedElevation,
+      elevation: elevation,
       color: backgroundColor,
       shape: const StadiumBorder(),
       child: ConstrainedBox(

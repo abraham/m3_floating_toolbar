@@ -173,6 +173,9 @@ Defaults follow the Material Design 3 specs: 64dp container height, full
 (stadium) corner shape, 8dp internal padding, 4dp between items, and a 16dp
 minimum margin from the screen edge.
 
+Floating toolbars are elevated by default. Set `elevation: 0` when the content
+beneath the toolbar is already visually distinct.
+
 ```dart
 M3FloatingToolbar(
   actions: [...],
