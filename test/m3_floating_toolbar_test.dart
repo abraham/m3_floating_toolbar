@@ -24,7 +24,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -64,7 +64,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -113,7 +113,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -161,7 +161,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -170,7 +170,7 @@ void main() {
       final material = tester.widget<Material>(materialFinder);
 
       // Check default elevation
-      expect(material.elevation, equals(0));
+      expect(material.elevation, equals(1));
 
       // Check stadium border shape
       expect(material.shape, isA<StadiumBorder>());
@@ -243,7 +243,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -282,7 +282,7 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -412,7 +412,7 @@ void main() {
         (widget) =>
             widget is Material &&
             widget.key == testKey &&
-            widget.elevation == 0 &&
+            widget.elevation == 1 &&
             widget.shape is StadiumBorder &&
             widget.child is ConstrainedBox,
       );
@@ -677,7 +677,7 @@ void main() {
           final materialFinder = find.byWidgetPredicate(
             (widget) =>
                 widget is Material &&
-                widget.elevation == 0 &&
+                widget.elevation == 1 &&
                 widget.shape is StadiumBorder &&
                 widget.child is ConstrainedBox,
           );
@@ -714,7 +714,7 @@ void main() {
         final materialFinder = find.byWidgetPredicate(
           (widget) =>
               widget is Material &&
-              widget.elevation == 0 &&
+              widget.elevation == 1 &&
               widget.shape is StadiumBorder &&
               widget.child is ConstrainedBox,
         );
