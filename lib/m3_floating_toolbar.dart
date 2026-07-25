@@ -2,39 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:m3_floating_toolbar/m3_floating_toolbar_action.dart';
 
-Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
-  return MaterialApp(
-    home: SizedBox.expand(
-      child: Scaffold(
-        body: SafeArea(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: child,
+/// Builds the [MaterialApp] shell shared by the preview wrappers.
+///
+/// The brightness is read from the ambient [MediaQuery], which the widget
+/// previewer updates when the light/dark mode toggle is used. The theme is
+/// then passed explicitly so it is not overridden by the [MaterialApp]'s own
+/// view based [MediaQuery].
+Widget _previewWrapper({
+  required Alignment alignment,
+  required EdgeInsets padding,
+  required Widget child,
+}) {
+  return Builder(
+    builder: (context) {
+      final brightness = MediaQuery.platformBrightnessOf(context);
+
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(brightness: brightness),
+        home: SizedBox.expand(
+          child: Scaffold(
+            body: SafeArea(
+              child: Align(
+                alignment: alignment,
+                child: Padding(padding: padding, child: child),
+              ),
             ),
           ),
         ),
-      ),
-    ),
+      );
+    },
+  );
+}
+
+Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
+  return _previewWrapper(
+    alignment: Alignment.bottomCenter,
+    padding: const EdgeInsets.only(bottom: 16),
+    child: child,
   );
 }
 
 Widget m3FloatingToolbarEndCenterPreviewWrapper(Widget child) {
-  return MaterialApp(
-    home: SizedBox.expand(
-      child: Scaffold(
-        body: SafeArea(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: child,
-            ),
-          ),
-        ),
-      ),
-    ),
+  return _previewWrapper(
+    alignment: Alignment.centerRight,
+    padding: const EdgeInsets.only(right: 16),
+    child: child,
   );
 }
 
@@ -126,7 +139,10 @@ class _M3FloatingToolbarThemeColorsPreviewState
         const SizedBox(height: 16),
         Theme(
           data: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: _seedColor),
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: _seedColor,
+              brightness: Theme.of(context).brightness,
+            ),
           ),
           child: M3FloatingToolbar(
             variant: M3FloatingToolbarVariant.vibrant,
