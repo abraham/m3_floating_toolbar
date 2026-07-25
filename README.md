@@ -13,7 +13,11 @@ A Flutter package that provides a Material Design 3 [floating pill-style toolbar
 - ⚙️ Customizable elevation, padding, spacing, and colors
 - 📱 Responsive layout that adapts to content
 
-[![example screenshot](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot.png)](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot.png)
+[![examples of icons and selected label, labels and selected icon, and icons with FAB](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot1.png)](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot1.png)
+
+[![examples of all icons, all icons and labels, and vertical icons](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot2.png)](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot2.png)
+
+[![examples of vertical with icons and FAB, icons in dark mode, and colorful versions ](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot3.png)](https://raw.githubusercontent.com/abraham/m3_floating_toolbar/refs/heads/main/screenshot3.png)
 
 ## Getting started
 
