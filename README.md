@@ -26,7 +26,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  m3_floating_toolbar: ^0.1.0
+  m3_floating_toolbar: ^0.2.1
 ```
 
 Then run:
