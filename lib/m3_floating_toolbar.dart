@@ -20,10 +20,33 @@ Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
   );
 }
 
+/// Material Design 3 floating toolbar container height.
+const double _kContainerHeight = 64;
+
+/// Material Design 3 floating toolbar spacing between the toolbar and an
+/// adjacent floating action button.
+const double _kToolbarToFabGap = 8;
+
+/// Minimum accessible touch target size for toolbar actions.
+const double _kMinTouchTargetSize = 48;
+
+/// Default Material Design 3 icon size for toolbar actions.
+const double _kIconSize = 24;
+
+/// Color configurations defined by the Material Design 3 toolbar specs.
+enum M3FloatingToolbarVariant {
+  /// Surface container based coloring (default).
+  standard,
+
+  /// Primary container based coloring.
+  vibrant,
+}
+
 /// A floating pill-style Material Design 3 toolbar.
 ///
-/// Displays a row of actions in a rounded container with primaryContainer
-/// theming. Supports mixed usage of icon-only and labeled buttons.
+/// Displays a row of actions in a rounded container following the Material
+/// Design 3 toolbar specs. Supports mixed usage of icon-only and labeled
+/// buttons.
 ///
 /// ## Usage
 ///
@@ -70,12 +93,10 @@ Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
 class M3FloatingToolbar extends StatelessWidget {
   const M3FloatingToolbar({
     required this.actions,
-    this.elevation = 2,
-    this.internalPadding = const EdgeInsets.symmetric(
-      horizontal: 16,
-      vertical: 12,
-    ),
-    this.spacing = 8,
+    this.variant = M3FloatingToolbarVariant.standard,
+    this.elevation,
+    this.internalPadding = const EdgeInsets.all(8),
+    this.spacing = 4,
     this.color,
     this.foregroundColor,
     this.floatingActionButton,
@@ -86,19 +107,32 @@ class M3FloatingToolbar extends StatelessWidget {
   /// List of actions to display in the toolbar
   final List<M3FloatingToolbarAction> actions;
 
-  /// Elevation of the toolbar container (default: 2)
-  final double elevation;
+  /// Color configuration of the toolbar (default: standard)
+  final M3FloatingToolbarVariant variant;
 
-  /// Internal padding inside the toolbar (default: horizontal 16, vertical 8)
+  /// Elevation of the toolbar container.
+  ///
+  /// Defaults to 0, or 1 when a [floatingActionButton] is provided.
+  final double? elevation;
+
+  /// Internal padding inside the toolbar (default: 8 on all sides)
   final EdgeInsets internalPadding;
 
-  /// Spacing between action buttons (default: 8)
+  /// Spacing between action buttons (default: 4)
   final double spacing;
 
-  /// Background color override (defaults to theme's primaryContainer)
+  /// Background color override.
+  ///
+  /// Defaults to the color role of the selected [variant]: surfaceContainer
+  /// for [M3FloatingToolbarVariant.standard] and primaryContainer for
+  /// [M3FloatingToolbarVariant.vibrant].
   final Color? color;
 
-  /// Foreground color override (defaults to theme's onPrimaryContainer)
+  /// Foreground color override.
+  ///
+  /// Defaults to the content color role of the selected [variant]: onSurface
+  /// for [M3FloatingToolbarVariant.standard] and onPrimaryContainer for
+  /// [M3FloatingToolbarVariant.vibrant].
   final Color? foregroundColor;
 
   /// Optional key for the toolbar container
@@ -264,24 +298,29 @@ class M3FloatingToolbar extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final backgroundColor = color ?? colorScheme.primaryContainer;
-    final textColor = foregroundColor ?? colorScheme.onPrimaryContainer;
+    final backgroundColor = color ?? _containerColor(colorScheme);
+    final textColor = foregroundColor ?? _contentColor(colorScheme);
+    final resolvedElevation =
+        elevation ?? (floatingActionButton == null ? 0.0 : 1.0);
 
     final toolbarWidget = Material(
       key: toolbarKey,
-      elevation: elevation,
+      elevation: resolvedElevation,
       color: backgroundColor,
       shape: const StadiumBorder(),
-      child: Padding(
-        padding: internalPadding,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (int i = 0; i < actions.length; i++) ...[
-              if (i > 0) SizedBox(width: spacing),
-              _buildActionButton(actions[i], textColor),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: _kContainerHeight),
+        child: Padding(
+          padding: internalPadding,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (int i = 0; i < actions.length; i++) ...[
+                if (i > 0) SizedBox(width: spacing),
+                _buildActionButton(actions[i], textColor),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -296,23 +335,34 @@ class M3FloatingToolbar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         toolbarWidget,
-        SizedBox(width: spacing),
+        const SizedBox(width: _kToolbarToFabGap),
         floatingActionButton!,
       ],
     );
   }
+
+  Color _containerColor(ColorScheme colorScheme) => switch (variant) {
+    M3FloatingToolbarVariant.standard => colorScheme.surfaceContainer,
+    M3FloatingToolbarVariant.vibrant => colorScheme.primaryContainer,
+  };
+
+  Color _contentColor(ColorScheme colorScheme) => switch (variant) {
+    M3FloatingToolbarVariant.standard => colorScheme.onSurface,
+    M3FloatingToolbarVariant.vibrant => colorScheme.onPrimaryContainer,
+  };
 
   Widget _buildActionButton(M3FloatingToolbarAction action, Color textColor) {
     // If action has a label, use TextButton.icon
     if (action.label != null) {
       final button = TextButton.icon(
         onPressed: action.onPressed,
-        icon: Icon(action.icon),
+        icon: Icon(action.icon, size: _kIconSize),
         label: Text(action.label!),
         style: TextButton.styleFrom(
           foregroundColor: textColor,
-          minimumSize: const Size(0, 32), // Minimal height for accessibility
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          // Meets the minimum accessible touch target height.
+          minimumSize: const Size(0, _kMinTouchTargetSize),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       );
@@ -330,9 +380,12 @@ class M3FloatingToolbar extends StatelessWidget {
     // Icon-only button
     final iconButton = IconButton(
       onPressed: action.onPressed,
-      icon: Icon(action.icon),
+      icon: Icon(action.icon, size: _kIconSize),
       color: textColor,
-      constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+      constraints: const BoxConstraints(
+        minWidth: _kMinTouchTargetSize,
+        minHeight: _kMinTouchTargetSize,
+      ),
       style: IconButton.styleFrom(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),

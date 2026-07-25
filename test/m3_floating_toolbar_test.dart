@@ -24,8 +24,9 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -63,8 +64,9 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -111,8 +113,9 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -158,15 +161,16 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
       final material = tester.widget<Material>(materialFinder);
 
       // Check default elevation
-      expect(material.elevation, equals(2));
+      expect(material.elevation, equals(0));
 
       // Check stadium border shape
       expect(material.shape, isA<StadiumBorder>());
@@ -175,10 +179,7 @@ void main() {
       final padding = tester.widget<Padding>(
         find.byWidgetPredicate((w) => w is Padding && w.child is Row),
       );
-      expect(
-        padding.padding,
-        equals(const EdgeInsets.symmetric(horizontal: 16, vertical: 12)),
-      );
+      expect(padding.padding, equals(const EdgeInsets.all(8)));
     });
 
     testWidgets('applies custom styling correctly', (tester) async {
@@ -242,8 +243,9 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -251,7 +253,7 @@ void main() {
       final theme = ThemeData.light();
 
       // Check that theme colors are used
-      expect(material.color, equals(theme.colorScheme.primaryContainer));
+      expect(material.color, equals(theme.colorScheme.surfaceContainer));
     });
 
     testWidgets('applies custom colors correctly', (tester) async {
@@ -280,8 +282,9 @@ void main() {
       final materialFinder = find.byWidgetPredicate(
         (widget) =>
             widget is Material &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -409,8 +412,9 @@ void main() {
         (widget) =>
             widget is Material &&
             widget.key == testKey &&
-            widget.elevation == 2 &&
-            widget.shape is StadiumBorder,
+            widget.elevation == 0 &&
+            widget.shape is StadiumBorder &&
+            widget.child is ConstrainedBox,
       );
       expect(materialFinder, findsOneWidget);
 
@@ -639,7 +643,7 @@ void main() {
         final materialFinder = find.byWidgetPredicate(
           (widget) =>
               widget is Material &&
-              widget.elevation == 2 &&
+              widget.elevation == 1 &&
               widget.shape is StadiumBorder,
         );
         expect(materialFinder, findsOneWidget);
@@ -673,8 +677,9 @@ void main() {
           final materialFinder = find.byWidgetPredicate(
             (widget) =>
                 widget is Material &&
-                widget.elevation == 2 &&
-                widget.shape is StadiumBorder,
+                widget.elevation == 0 &&
+                widget.shape is StadiumBorder &&
+                widget.child is ConstrainedBox,
           );
           expect(materialFinder, findsOneWidget);
 
@@ -709,8 +714,9 @@ void main() {
         final materialFinder = find.byWidgetPredicate(
           (widget) =>
               widget is Material &&
-              widget.elevation == 2 &&
-              widget.shape is StadiumBorder,
+              widget.elevation == 0 &&
+              widget.shape is StadiumBorder &&
+              widget.child is ConstrainedBox,
         );
         expect(materialFinder, findsOneWidget);
 
@@ -760,14 +766,17 @@ void main() {
         expect(find.byType(FloatingActionButton), findsOneWidget);
         expect(find.byIcon(Icons.add), findsOneWidget);
 
-        // Check that spacing elements exist (2 between actions + 1 before FAB)
-        final sizedBoxes = tester.widgetList<SizedBox>(
+        // Custom spacing applies between actions only; the gap before the FAB
+        // is fixed at the 8dp defined by the Material 3 specs.
+        final actionSpacers = tester.widgetList<SizedBox>(
           find.byWidgetPredicate((w) => w is SizedBox && w.width == 16),
         );
-        expect(
-          sizedBoxes,
-          hasLength(2),
-        ); // Two spacers: between actions and before FAB
+        expect(actionSpacers, hasLength(1));
+
+        final fabGap = tester.widgetList<SizedBox>(
+          find.byWidgetPredicate((w) => w is SizedBox && w.width == 8),
+        );
+        expect(fabGap, hasLength(1));
       });
 
       testWidgets('FAB is positioned at end with default 8dp spacing', (
@@ -937,7 +946,7 @@ void main() {
         final materialFinder = find.byWidgetPredicate(
           (widget) =>
               widget is Material &&
-              widget.elevation == 2 &&
+              widget.elevation == 1 &&
               widget.shape is StadiumBorder,
         );
         expect(materialFinder, findsOneWidget);
@@ -945,7 +954,7 @@ void main() {
         final material = tester.widget<Material>(materialFinder);
         expect(
           material.color,
-          equals(customTheme.colorScheme.primaryContainer),
+          equals(customTheme.colorScheme.surfaceContainer),
         );
 
         // Verify FAB is present and uses correct theme colors
@@ -1005,13 +1014,13 @@ void main() {
         final materialFinder = find.byWidgetPredicate(
           (widget) =>
               widget is Material &&
-              widget.elevation == 2 &&
+              widget.elevation == 1 &&
               widget.shape is StadiumBorder,
         );
         expect(materialFinder, findsOneWidget);
 
         final material = tester.widget<Material>(materialFinder);
-        expect(material.color, equals(lightTheme.colorScheme.primaryContainer));
+        expect(material.color, equals(lightTheme.colorScheme.surfaceContainer));
 
         // Verify FAB inherits theme colors (has null explicit colors)
         final lightFab = tester.widget<FloatingActionButton>(
@@ -1050,7 +1059,7 @@ void main() {
         final newMaterial = tester.widget<Material>(materialFinder);
         expect(
           newMaterial.color,
-          equals(darkTheme.colorScheme.primaryContainer),
+          equals(darkTheme.colorScheme.surfaceContainer),
         );
 
         // Verify FAB still inherits theme colors (has null explicit colors)
