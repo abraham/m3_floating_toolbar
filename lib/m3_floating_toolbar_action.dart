@@ -10,6 +10,7 @@ class M3FloatingToolbarAction {
     required this.onPressed,
     this.label,
     this.tooltip,
+    this.selected = false,
   });
 
   /// The icon to display for this action
@@ -24,6 +25,12 @@ class M3FloatingToolbarAction {
 
   /// Optional tooltip text to show on hover/long press
   final String? tooltip;
+
+  /// Whether this action is currently selected (default: false)
+  ///
+  /// Selected actions are rendered as toggle buttons using the selected
+  /// color roles of the toolbar's variant.
+  final bool selected;
 
   /// Callback when the action is pressed
   final VoidCallback onPressed;

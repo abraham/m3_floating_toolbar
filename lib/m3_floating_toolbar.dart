@@ -38,6 +38,130 @@ Widget m3FloatingToolbarEndCenterPreviewWrapper(Widget child) {
   );
 }
 
+/// Bright seed colors offered by the theme selection preview.
+const List<({String name, Color color})> _kPreviewThemeColors = [
+  (name: 'Red', color: Color(0xFFFF1744)),
+  (name: 'Orange', color: Color(0xFFFF9100)),
+  (name: 'Green', color: Color(0xFF00E676)),
+  (name: 'Blue', color: Color(0xFF00B0FF)),
+  (name: 'Purple', color: Color(0xFFD500F9)),
+];
+
+/// Preview that themes the toolbar from a selection of bright colors.
+@Preview(
+  name: 'M3FloatingToolbar theme colors',
+  size: Size(390, 400),
+  wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+)
+Widget m3FloatingToolbarThemeColorsPreview() =>
+    const _M3FloatingToolbarThemeColorsPreview();
+
+class _M3FloatingToolbarThemeColorsPreview extends StatefulWidget {
+  const _M3FloatingToolbarThemeColorsPreview();
+
+  @override
+  State<_M3FloatingToolbarThemeColorsPreview> createState() =>
+      _M3FloatingToolbarThemeColorsPreviewState();
+}
+
+class _M3FloatingToolbarThemeColorsPreviewState
+    extends State<_M3FloatingToolbarThemeColorsPreview> {
+  Color _seedColor = _kPreviewThemeColors.first.color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final option in _kPreviewThemeColors) _buildSwatch(option),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: _seedColor),
+          ),
+          child: M3FloatingToolbar(
+            variant: M3FloatingToolbarVariant.vibrant,
+            actions: [
+              M3FloatingToolbarAction(
+                icon: Icons.home,
+                semanticLabel: 'Home',
+                tooltip: 'Home',
+                // ignore: no-empty-block
+                onPressed: () {},
+              ),
+              M3FloatingToolbarAction(
+                icon: Icons.explore,
+                label: 'Explore',
+                semanticLabel: 'Explore',
+                tooltip: 'Explore',
+                selected: true,
+                // ignore: no-empty-block
+                onPressed: () {},
+              ),
+              M3FloatingToolbarAction(
+                icon: Icons.notifications,
+                semanticLabel: 'Notifications',
+                tooltip: 'Notifications',
+                // ignore: no-empty-block
+                onPressed: () {},
+              ),
+              M3FloatingToolbarAction(
+                icon: Icons.person,
+                semanticLabel: 'Profile',
+                tooltip: 'Profile',
+                // ignore: no-empty-block
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSwatch(({String name, Color color}) option) {
+    final isSelected = option.color == _seedColor;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Tooltip(
+        message: '${option.name} theme',
+        child: Semantics(
+          label: '${option.name} theme',
+          button: true,
+          selected: isSelected,
+          child: InkWell(
+            onTap: () => setState(() => _seedColor = option.color),
+            customBorder: const CircleBorder(),
+            child: Container(
+              width: _kMinTouchTargetSize,
+              height: _kMinTouchTargetSize,
+              decoration: BoxDecoration(
+                color: option.color,
+                shape: BoxShape.circle,
+                border: isSelected
+                    ? Border.all(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        width: 3,
+                      )
+                    : null,
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, color: Colors.white, size: 20)
+                  : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Material Design 3 floating toolbar container height.
 const double _kContainerHeight = 64;
 
@@ -185,6 +309,7 @@ class M3FloatingToolbar extends StatelessWidget {
         icon: Icons.explore,
         label: 'Explore',
         semanticLabel: 'Explore',
+        selected: true,
         // ignore: no-empty-block
         onPressed: () {},
       ),
@@ -292,6 +417,7 @@ class M3FloatingToolbar extends StatelessWidget {
         label: 'Explore',
         semanticLabel: 'Explore',
         tooltip: 'Explore',
+        selected: true,
         // ignore: no-empty-block
         onPressed: () {},
       ),
@@ -409,7 +535,7 @@ class M3FloatingToolbar extends StatelessWidget {
             width: isHorizontal ? spacing : null,
             height: isHorizontal ? null : spacing,
           ),
-        _buildActionButton(actions[i], textColor),
+        _buildActionButton(actions[i], textColor, colorScheme),
       ],
     ];
 
@@ -467,7 +593,28 @@ class M3FloatingToolbar extends StatelessWidget {
     M3FloatingToolbarVariant.vibrant => colorScheme.onPrimaryContainer,
   };
 
-  Widget _buildActionButton(M3FloatingToolbarAction action, Color textColor) {
+  Color _selectedContainerColor(ColorScheme colorScheme) => switch (variant) {
+    M3FloatingToolbarVariant.standard => colorScheme.secondaryContainer,
+    M3FloatingToolbarVariant.vibrant => colorScheme.surfaceContainer,
+  };
+
+  Color _selectedContentColor(ColorScheme colorScheme) => switch (variant) {
+    M3FloatingToolbarVariant.standard => colorScheme.onSecondaryContainer,
+    M3FloatingToolbarVariant.vibrant => colorScheme.onSurface,
+  };
+
+  Widget _buildActionButton(
+    M3FloatingToolbarAction action,
+    Color textColor,
+    ColorScheme colorScheme,
+  ) {
+    final backgroundColor = action.selected
+        ? _selectedContainerColor(colorScheme)
+        : null;
+    final contentColor = action.selected
+        ? _selectedContentColor(colorScheme)
+        : textColor;
+
     // If action has a label, use TextButton.icon
     if (action.label != null) {
       final button = TextButton.icon(
@@ -475,7 +622,8 @@ class M3FloatingToolbar extends StatelessWidget {
         icon: Icon(action.icon, size: _kIconSize),
         label: Text(action.label!),
         style: TextButton.styleFrom(
-          foregroundColor: textColor,
+          foregroundColor: contentColor,
+          backgroundColor: backgroundColor,
           // Meets the minimum accessible touch target height.
           minimumSize: const Size(0, _kMinTouchTargetSize),
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -487,6 +635,7 @@ class M3FloatingToolbar extends StatelessWidget {
       return Semantics(
         label: action.semanticLabel,
         button: true,
+        selected: action.selected,
         child: action.tooltip != null
             ? Tooltip(message: action.tooltip!, child: button)
             : button,
@@ -497,12 +646,13 @@ class M3FloatingToolbar extends StatelessWidget {
     final iconButton = IconButton(
       onPressed: action.onPressed,
       icon: Icon(action.icon, size: _kIconSize),
-      color: textColor,
+      color: contentColor,
       constraints: const BoxConstraints(
         minWidth: _kMinTouchTargetSize,
         minHeight: _kMinTouchTargetSize,
       ),
       style: IconButton.styleFrom(
+        backgroundColor: backgroundColor,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     );
@@ -513,6 +663,7 @@ class M3FloatingToolbar extends StatelessWidget {
       child: Semantics(
         label: action.semanticLabel,
         button: true,
+        selected: action.selected,
         child: iconButton,
       ),
     );
