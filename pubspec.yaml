@@ -1,11 +1,13 @@
 name: m3_floating_toolbar
 description: "A Material Design 3 floating toolbar widget for Flutter."
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/abraham/m3_floating_toolbar
 topics:
-  - materialdesign
+  - material-design
   - material3
   - material
+  - buttons
+  - widget
 
 
 environment:
