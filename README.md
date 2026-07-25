@@ -5,8 +5,9 @@ A Flutter package that provides a Material Design 3 [floating pill-style toolbar
 ## Features
 
 - 🎨 Material Design 3 styling with automatic theming
+- 🎛️ Standard and vibrant color configurations
 - 🔘 Support for both icon-only and labeled action buttons
-- ♿ Built-in accessibility with semantic labels and tooltips
+- ♿ Built-in accessibility with semantic labels, tooltips, and 48dp touch targets
 - 🎯 Optional FloatingActionButton integration
 - ⚙️ Customizable elevation, padding, spacing, and colors
 - 📱 Responsive layout that adapts to content
@@ -119,7 +120,24 @@ M3FloatingToolbar(
 )
 ```
 
+### Color variants
+
+The toolbar follows the Material Design 3 toolbar color configurations. The
+`standard` variant (default) uses `surfaceContainer`, and `vibrant` uses
+`primaryContainer`.
+
+```dart
+M3FloatingToolbar(
+  variant: M3FloatingToolbarVariant.vibrant,
+  actions: [...],
+)
+```
+
 ### Customization
+
+Defaults follow the Material Design 3 specs: 64dp container height, full
+(stadium) corner shape, 8dp internal padding, 4dp between items, and a 16dp
+minimum margin from the screen edge.
 
 ```dart
 M3FloatingToolbar(
