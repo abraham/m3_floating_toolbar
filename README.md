@@ -7,7 +7,8 @@ A Flutter package that provides a Material Design 3 [floating pill-style toolbar
 - 🎨 Material Design 3 styling with automatic theming
 - 🎛️ Standard and vibrant color configurations
 - ↔️ Horizontal and vertical layouts
-- 🔘 Support for both icon-only and labeled action buttons
+- 🔘 Support for icon-only, label-only, and icon + label action buttons
+- ✅ Selected state for toggle and navigation style toolbars
 - ♿ Built-in accessibility with semantic labels, tooltips, and 48dp touch targets
 - 🎯 Optional FloatingActionButton integration
 - ⚙️ Customizable elevation, padding, spacing, and colors
@@ -97,6 +98,49 @@ M3FloatingToolbar(
 )
 ```
 
+Omit `icon` to render a label-only button. Every action requires an `icon`, a
+`label`, or both.
+
+```dart
+M3FloatingToolbarAction(
+  label: 'Profile',
+  semanticLabel: 'Profile tab',
+  onPressed: () => print('Profile pressed'),
+)
+```
+
+### Selected actions
+
+Set `selected: true` to highlight an action with the variant's selected color
+roles. The `standard` variant uses `secondaryContainer`/`onSecondaryContainer`
+and the `vibrant` variant uses `surfaceContainer`/`onSurface`.
+
+```dart
+M3FloatingToolbar(
+  actions: [
+    M3FloatingToolbarAction(
+      icon: Icons.home,
+      semanticLabel: 'Home',
+      tooltip: 'Home',
+      onPressed: () => print('Home pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.explore,
+      label: 'Explore',
+      semanticLabel: 'Explore',
+      selected: true,
+      onPressed: () => print('Explore pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.person,
+      semanticLabel: 'Profile',
+      tooltip: 'Profile',
+      onPressed: () => print('Profile pressed'),
+    ),
+  ],
+)
+```
+
 ### With FloatingActionButton
 
 ```dart
@@ -174,8 +218,9 @@ M3FloatingToolbar(
 ### Customization
 
 Defaults follow the Material Design 3 specs: 64dp container height, full
-(stadium) corner shape, 8dp internal padding, 4dp between items, and a 16dp
-minimum margin from the screen edge.
+(stadium) corner shape, 8dp internal padding, and 4dp between items. The specs
+also call for a 16dp minimum margin from the screen edge, which is applied by
+the layout that positions the toolbar.
 
 Floating toolbars are elevated by default. Set `elevation: 0` when the content
 beneath the toolbar is already visually distinct.
