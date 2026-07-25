@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Flutter Previews",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "flutter widget-preview start",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
