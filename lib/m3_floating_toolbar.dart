@@ -20,6 +20,24 @@ Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
   );
 }
 
+Widget m3FloatingToolbarEndCenterPreviewWrapper(Widget child) {
+  return MaterialApp(
+    home: SizedBox.expand(
+      child: Scaffold(
+        body: SafeArea(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: child,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 /// Material Design 3 floating toolbar container height.
 const double _kContainerHeight = 64;
 
@@ -93,6 +111,7 @@ enum M3FloatingToolbarVariant {
 class M3FloatingToolbar extends StatelessWidget {
   const M3FloatingToolbar({
     required this.actions,
+    this.direction = Axis.horizontal,
     this.variant = M3FloatingToolbarVariant.standard,
     this.elevation,
     this.internalPadding = const EdgeInsets.all(8),
@@ -106,6 +125,9 @@ class M3FloatingToolbar extends StatelessWidget {
 
   /// List of actions to display in the toolbar
   final List<M3FloatingToolbarAction> actions;
+
+  /// Layout direction of the toolbar (default: horizontal)
+  final Axis direction;
 
   /// Color configuration of the toolbar (default: standard)
   final M3FloatingToolbarVariant variant;
@@ -284,6 +306,82 @@ class M3FloatingToolbar extends StatelessWidget {
     ],
   );
 
+  @Preview(
+    name: 'M3FloatingToolbar vertical',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarEndCenterPreviewWrapper,
+  )
+  factory M3FloatingToolbar.previewVertical() => M3FloatingToolbar(
+    direction: Axis.vertical,
+    actions: [
+      M3FloatingToolbarAction(
+        icon: Icons.home,
+        semanticLabel: 'Home',
+        tooltip: 'Home',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.explore,
+        semanticLabel: 'Explore',
+        tooltip: 'Explore',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.notifications,
+        semanticLabel: 'Notifications',
+        tooltip: 'Notifications',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.person,
+        semanticLabel: 'Profile',
+        tooltip: 'Profile',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+    ],
+  );
+
+  @Preview(
+    name: 'M3FloatingToolbar vertical with FAB',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarEndCenterPreviewWrapper,
+  )
+  factory M3FloatingToolbar.previewVerticalWithFab() => M3FloatingToolbar(
+    direction: Axis.vertical,
+    actions: [
+      M3FloatingToolbarAction(
+        icon: Icons.home,
+        semanticLabel: 'Home',
+        tooltip: 'Home',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.explore,
+        semanticLabel: 'Explore',
+        tooltip: 'Explore',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.person,
+        semanticLabel: 'Profile',
+        tooltip: 'Profile',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+    ],
+    floatingActionButton: FloatingActionButton(
+      // ignore: no-empty-block
+      onPressed: () {},
+      child: const Icon(Icons.add_box),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     // Handle empty actions: assert in debug, return empty in release
@@ -302,6 +400,18 @@ class M3FloatingToolbar extends StatelessWidget {
     final textColor = foregroundColor ?? _contentColor(colorScheme);
     final resolvedElevation =
         elevation ?? (floatingActionButton == null ? 0.0 : 1.0);
+    final isHorizontal = direction == Axis.horizontal;
+
+    final children = <Widget>[
+      for (int i = 0; i < actions.length; i++) ...[
+        if (i > 0)
+          SizedBox(
+            width: isHorizontal ? spacing : null,
+            height: isHorizontal ? null : spacing,
+          ),
+        _buildActionButton(actions[i], textColor),
+      ],
+    ];
 
     final toolbarWidget = Material(
       key: toolbarKey,
@@ -309,18 +419,15 @@ class M3FloatingToolbar extends StatelessWidget {
       color: backgroundColor,
       shape: const StadiumBorder(),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: _kContainerHeight),
+        constraints: BoxConstraints(
+          minWidth: isHorizontal ? 0 : _kContainerHeight,
+          minHeight: isHorizontal ? _kContainerHeight : 0,
+        ),
         child: Padding(
           padding: internalPadding,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (int i = 0; i < actions.length; i++) ...[
-                if (i > 0) SizedBox(width: spacing),
-                _buildActionButton(actions[i], textColor),
-              ],
-            ],
-          ),
+          child: isHorizontal
+              ? Row(mainAxisSize: MainAxisSize.min, children: children)
+              : Column(mainAxisSize: MainAxisSize.min, children: children),
         ),
       ),
     );
@@ -331,14 +438,23 @@ class M3FloatingToolbar extends StatelessWidget {
     }
 
     // Position FAB outside the pill shape
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        toolbarWidget,
-        const SizedBox(width: _kToolbarToFabGap),
-        floatingActionButton!,
-      ],
-    );
+    return isHorizontal
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              toolbarWidget,
+              const SizedBox(width: _kToolbarToFabGap),
+              floatingActionButton!,
+            ],
+          )
+        : Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              toolbarWidget,
+              const SizedBox(height: _kToolbarToFabGap),
+              floatingActionButton!,
+            ],
+          );
   }
 
   Color _containerColor(ColorScheme colorScheme) => switch (variant) {
