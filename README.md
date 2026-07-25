@@ -43,22 +43,22 @@ import 'package:m3_floating_toolbar/m3_floating_toolbar_action.dart';
 M3FloatingToolbar(
   actions: [
     M3FloatingToolbarAction(
-      icon: Icons.share,
-      semanticLabel: 'Share',
-      tooltip: 'Share',
-      onPressed: () => print('Share pressed'),
+      icon: Icons.home,
+      semanticLabel: 'Home',
+      tooltip: 'Home',
+      onPressed: () => print('Home pressed'),
     ),
     M3FloatingToolbarAction(
-      icon: Icons.favorite,
-      semanticLabel: 'Like',
-      tooltip: 'Like',
-      onPressed: () => print('Like pressed'),
+      icon: Icons.explore,
+      semanticLabel: 'Explore',
+      tooltip: 'Explore',
+      onPressed: () => print('Explore pressed'),
     ),
     M3FloatingToolbarAction(
-      icon: Icons.bookmark,
-      semanticLabel: 'Bookmark',
-      tooltip: 'Bookmark',
-      onPressed: () => print('Bookmark pressed'),
+      icon: Icons.person,
+      semanticLabel: 'Profile',
+      tooltip: 'Profile',
+      onPressed: () => print('Profile pressed'),
     ),
   ],
 )
@@ -70,16 +70,22 @@ M3FloatingToolbar(
 M3FloatingToolbar(
   actions: [
     M3FloatingToolbarAction(
-      icon: Icons.share,
-      label: 'Share',
-      semanticLabel: 'Share post',
-      onPressed: () => print('Share pressed'),
+      icon: Icons.home,
+      label: 'Home',
+      semanticLabel: 'Home tab',
+      onPressed: () => print('Home pressed'),
     ),
     M3FloatingToolbarAction(
-      icon: Icons.bookmark,
-      label: 'Save',
-      semanticLabel: 'Bookmark post',
-      onPressed: () => print('Bookmark pressed'),
+      icon: Icons.explore,
+      label: 'Explore',
+      semanticLabel: 'Explore tab',
+      onPressed: () => print('Explore pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.person,
+      label: 'Profile',
+      semanticLabel: 'Profile tab',
+      onPressed: () => print('Profile pressed'),
     ),
   ],
 )
@@ -91,19 +97,24 @@ M3FloatingToolbar(
 M3FloatingToolbar(
   actions: [
     M3FloatingToolbarAction(
-      icon: Icons.share,
-      semanticLabel: 'Share',
-      onPressed: () => print('Share pressed'),
+      icon: Icons.home,
+      semanticLabel: 'Home',
+      onPressed: () => print('Home pressed'),
     ),
     M3FloatingToolbarAction(
-      icon: Icons.bookmark,
-      semanticLabel: 'Bookmark',
-      onPressed: () => print('Bookmark pressed'),
+      icon: Icons.explore,
+      semanticLabel: 'Explore',
+      onPressed: () => print('Explore pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.notifications,
+      semanticLabel: 'Notifications',
+      onPressed: () => print('Notifications pressed'),
     ),
   ],
   floatingActionButton: FloatingActionButton(
-    onPressed: () => print('FAB pressed'),
-    child: Icon(Icons.add),
+    onPressed: () => print('Create post pressed'),
+    child: Icon(Icons.add_box),
   ),
 )
 ```

@@ -2,6 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:m3_floating_toolbar/m3_floating_toolbar_action.dart';
 
+Widget m3FloatingToolbarBottomCenterPreviewWrapper(Widget child) {
+  return MaterialApp(
+    home: SizedBox.expand(
+      child: Scaffold(
+        body: SafeArea(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: child,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 /// A floating pill-style Material Design 3 toolbar.
 ///
 /// Displays a row of actions in a rounded container with primaryContainer
@@ -93,47 +111,55 @@ class M3FloatingToolbar extends StatelessWidget {
   /// and behavior while being integrated into the toolbar layout.
   final FloatingActionButton? floatingActionButton;
 
-  @Preview(name: 'M3FloatingToolbar preview')
+  @Preview(
+    name: 'M3FloatingToolbar preview',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+  )
   factory M3FloatingToolbar.preview() => M3FloatingToolbar(
     actions: [
       M3FloatingToolbarAction(
-        icon: Icons.share,
-        semanticLabel: 'Share post',
-        tooltip: 'Share',
+        icon: Icons.home,
+        semanticLabel: 'Home',
+        tooltip: 'Home',
         // ignore: no-empty-block
         onPressed: () {},
       ),
       M3FloatingToolbarAction(
-        icon: Icons.bookmark,
-        label: 'Save',
-        semanticLabel: 'Bookmark post',
+        icon: Icons.explore,
+        label: 'Explore',
+        semanticLabel: 'Explore',
         // ignore: no-empty-block
         onPressed: () {},
       ),
     ],
   );
 
-  @Preview(name: 'M3FloatingToolbar with FAB')
+  @Preview(
+    name: 'M3FloatingToolbar with FAB',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+  )
   factory M3FloatingToolbar.previewWithFab() => M3FloatingToolbar(
     actions: [
       M3FloatingToolbarAction(
-        icon: Icons.reply,
-        semanticLabel: 'Reply',
-        tooltip: 'Reply',
+        icon: Icons.home,
+        semanticLabel: 'Home',
+        tooltip: 'Home',
         // ignore: no-empty-block
         onPressed: () {},
       ),
       M3FloatingToolbarAction(
-        icon: Icons.favorite,
-        semanticLabel: 'Like',
-        tooltip: 'Like',
+        icon: Icons.explore,
+        semanticLabel: 'Explore',
+        tooltip: 'Explore',
         // ignore: no-empty-block
         onPressed: () {},
       ),
       M3FloatingToolbarAction(
-        icon: Icons.repeat,
-        semanticLabel: 'Repost',
-        tooltip: 'Repost',
+        icon: Icons.person,
+        semanticLabel: 'Profile',
+        tooltip: 'Profile',
         // ignore: no-empty-block
         onPressed: () {},
       ),
@@ -141,8 +167,87 @@ class M3FloatingToolbar extends StatelessWidget {
     floatingActionButton: FloatingActionButton(
       // ignore: no-empty-block
       onPressed: () {},
-      child: const Icon(Icons.add),
+      child: const Icon(Icons.add_box),
     ),
+  );
+
+  @Preview(
+    name: 'M3FloatingToolbar all icons',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+  )
+  factory M3FloatingToolbar.previewAllIcons() => M3FloatingToolbar(
+    actions: [
+      M3FloatingToolbarAction(
+        icon: Icons.home,
+        semanticLabel: 'Home',
+        tooltip: 'Home',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.explore,
+        semanticLabel: 'Explore',
+        tooltip: 'Explore',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.add_box,
+        semanticLabel: 'Post',
+        tooltip: 'Post',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.notifications,
+        semanticLabel: 'Notifications',
+        tooltip: 'Notifications',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.person,
+        semanticLabel: 'Profile',
+        tooltip: 'Profile',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+    ],
+  );
+
+  @Preview(
+    name: 'M3FloatingToolbar all icons with text',
+    size: Size(390, 400),
+    wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+  )
+  factory M3FloatingToolbar.previewAllIconsWithText() => M3FloatingToolbar(
+    actions: [
+      M3FloatingToolbarAction(
+        icon: Icons.home,
+        label: 'Home',
+        semanticLabel: 'Home',
+        tooltip: 'Home',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.explore,
+        label: 'Explore',
+        semanticLabel: 'Explore',
+        tooltip: 'Explore',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+      M3FloatingToolbarAction(
+        icon: Icons.person,
+        label: 'Profile',
+        semanticLabel: 'Profile',
+        tooltip: 'Profile',
+        // ignore: no-empty-block
+        onPressed: () {},
+      ),
+    ],
   );
 
   @override

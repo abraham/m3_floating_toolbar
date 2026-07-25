@@ -30,39 +30,39 @@ class FloatingToolbarDemo extends StatefulWidget {
 }
 
 class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
-  int _likeCount = 0;
-  bool _isBookmarked = false;
+  String _currentTab = 'Home';
   String _lastAction = 'No action yet';
 
-  void _handleShare() {
+  void _goToHome() {
     setState(() {
-      _lastAction = 'Shared!';
+      _currentTab = 'Home';
+      _lastAction = 'Opened Home feed';
     });
   }
 
-  void _handleLike() {
+  void _goToExplore() {
     setState(() {
-      _likeCount++;
-      _lastAction = 'Liked! Total: $_likeCount';
+      _currentTab = 'Explore';
+      _lastAction = 'Exploring trending posts';
     });
   }
 
-  void _handleBookmark() {
+  void _goToProfile() {
     setState(() {
-      _isBookmarked = !_isBookmarked;
-      _lastAction = _isBookmarked ? 'Bookmarked!' : 'Bookmark removed';
+      _currentTab = 'Profile';
+      _lastAction = 'Opened profile';
     });
   }
 
-  void _handleReply() {
+  void _openNotifications() {
     setState(() {
-      _lastAction = 'Opened reply dialog';
+      _lastAction = 'Viewed notifications';
     });
   }
 
-  void _handleAdd() {
+  void _createPost() {
     setState(() {
-      _lastAction = 'Add button pressed';
+      _lastAction = 'Opened post composer';
     });
   }
 
@@ -90,31 +90,29 @@ class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
 
               // Example 1: Icon-only toolbar
               const Text(
-                'Icon-only buttons:',
+                'Icon-only app nav:',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 12),
               M3FloatingToolbar(
                 actions: [
                   M3FloatingToolbarAction(
-                    icon: Icons.share,
-                    semanticLabel: 'Share post',
-                    tooltip: 'Share',
-                    onPressed: _handleShare,
+                    icon: Icons.home,
+                    semanticLabel: 'Home',
+                    tooltip: 'Home',
+                    onPressed: _goToHome,
                   ),
                   M3FloatingToolbarAction(
-                    icon: Icons.favorite,
-                    semanticLabel: 'Like post',
-                    tooltip: 'Like',
-                    onPressed: _handleLike,
+                    icon: Icons.explore,
+                    semanticLabel: 'Explore',
+                    tooltip: 'Explore',
+                    onPressed: _goToExplore,
                   ),
                   M3FloatingToolbarAction(
-                    icon: _isBookmarked
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    semanticLabel: 'Bookmark post',
-                    tooltip: 'Bookmark',
-                    onPressed: _handleBookmark,
+                    icon: Icons.person,
+                    semanticLabel: 'Profile',
+                    tooltip: 'Profile',
+                    onPressed: _goToProfile,
                   ),
                 ],
               ),
@@ -122,31 +120,29 @@ class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
 
               // Example 2: Mixed icon and labeled buttons
               const Text(
-                'Mixed buttons with labels:',
+                'Labeled app nav:',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 12),
               M3FloatingToolbar(
                 actions: [
                   M3FloatingToolbarAction(
-                    icon: Icons.reply,
-                    semanticLabel: 'Reply',
-                    tooltip: 'Reply',
-                    onPressed: _handleReply,
+                    icon: Icons.home,
+                    label: 'Home',
+                    semanticLabel: 'Home',
+                    onPressed: _goToHome,
                   ),
                   M3FloatingToolbarAction(
-                    icon: Icons.favorite,
-                    label: 'Like',
-                    semanticLabel: 'Like post',
-                    onPressed: _handleLike,
+                    icon: Icons.explore,
+                    label: 'Explore',
+                    semanticLabel: 'Explore',
+                    onPressed: _goToExplore,
                   ),
                   M3FloatingToolbarAction(
-                    icon: _isBookmarked
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
-                    label: 'Save',
-                    semanticLabel: 'Bookmark post',
-                    onPressed: _handleBookmark,
+                    icon: Icons.person,
+                    label: 'Profile',
+                    semanticLabel: 'Profile',
+                    onPressed: _goToProfile,
                   ),
                 ],
               ),
@@ -161,21 +157,27 @@ class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
               M3FloatingToolbar(
                 actions: [
                   M3FloatingToolbarAction(
-                    icon: Icons.share,
-                    semanticLabel: 'Share',
-                    tooltip: 'Share',
-                    onPressed: _handleShare,
+                    icon: Icons.home,
+                    semanticLabel: 'Home',
+                    tooltip: 'Home',
+                    onPressed: _goToHome,
                   ),
                   M3FloatingToolbarAction(
-                    icon: Icons.favorite,
-                    semanticLabel: 'Like',
-                    tooltip: 'Like',
-                    onPressed: _handleLike,
+                    icon: Icons.explore,
+                    semanticLabel: 'Explore',
+                    tooltip: 'Explore',
+                    onPressed: _goToExplore,
+                  ),
+                  M3FloatingToolbarAction(
+                    icon: Icons.notifications,
+                    semanticLabel: 'Notifications',
+                    tooltip: 'Notifications',
+                    onPressed: _openNotifications,
                   ),
                 ],
                 floatingActionButton: FloatingActionButton(
-                  onPressed: _handleAdd,
-                  child: const Icon(Icons.add),
+                  onPressed: _createPost,
+                  child: const Icon(Icons.add_box),
                 ),
               ),
               const SizedBox(height: 32),
@@ -191,9 +193,10 @@ class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
                 child: Column(
                   children: [
                     Text(
-                      'Last Action:',
+                      'Current tab: $_currentTab',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -203,14 +206,6 @@ class _FloatingToolbarDemoState extends State<FloatingToolbarDemo> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Likes: $_likeCount | Bookmarked: ${_isBookmarked ? "Yes" : "No"}',
-                      style: TextStyle(
-                        fontSize: 12,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
