@@ -125,4 +125,19 @@ M3FloatingToolbar(
 
 For a complete working example, see the [example](example/) directory.
 
+### VS Code command for Flutter previews
+
+This workspace includes a VS Code launch configuration named **Launch Flutter Previews**.
+
+Open **Run and Debug** and select:
+
+1. `Launch Flutter Previews`
+2. Start debugging
+
+This runs:
+
+```bash
+flutter widget-preview start
+```
+
 To report issues or contribute to this package, visit the [GitHub repository](https://github.com/abraham/m3_floating_toolbar).
