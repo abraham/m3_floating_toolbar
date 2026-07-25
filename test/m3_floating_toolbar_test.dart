@@ -1129,6 +1129,125 @@ void main() {
         );
       });
     });
+
+    group('vertical direction', () {
+      testWidgets('lays actions out in a Column', (tester) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            icon: Icons.home,
+            semanticLabel: 'Home',
+            onPressed: _mockCallback,
+          ),
+          const M3FloatingToolbarAction(
+            icon: Icons.person,
+            semanticLabel: 'Profile',
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: M3FloatingToolbar(
+                actions: actions,
+                direction: Axis.vertical,
+              ),
+            ),
+          ),
+        );
+
+        expect(
+          find.byWidgetPredicate((w) => w is Padding && w.child is Column),
+          findsOneWidget,
+        );
+        expect(
+          find.byWidgetPredicate((w) => w is Padding && w.child is Row),
+          findsNothing,
+        );
+
+        // Spacing is applied vertically between actions.
+        final spacers = tester.widgetList<SizedBox>(
+          find.byWidgetPredicate((w) => w is SizedBox && w.height == 4),
+        );
+        expect(spacers, hasLength(1));
+      });
+
+      testWidgets('applies the container size to the width', (tester) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            icon: Icons.home,
+            semanticLabel: 'Home',
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: M3FloatingToolbar(
+                actions: actions,
+                direction: Axis.vertical,
+              ),
+            ),
+          ),
+        );
+
+        final constrainedBox = tester.widget<ConstrainedBox>(
+          find
+              .descendant(
+                of: find.byType(M3FloatingToolbar),
+                matching: find.byType(ConstrainedBox),
+              )
+              .first,
+        );
+        expect(constrainedBox.constraints.minWidth, equals(64));
+        expect(constrainedBox.constraints.minHeight, equals(0));
+      });
+
+      testWidgets('positions the FAB below the toolbar', (tester) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            icon: Icons.home,
+            semanticLabel: 'Home',
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        final fab = FloatingActionButton(
+          onPressed: _mockCallback,
+          child: const Icon(Icons.add),
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: M3FloatingToolbar(
+                actions: actions,
+                direction: Axis.vertical,
+                floatingActionButton: fab,
+              ),
+            ),
+          ),
+        );
+
+        // The 8dp toolbar-to-FAB gap is applied vertically.
+        final fabGap = tester.widgetList<SizedBox>(
+          find.byWidgetPredicate((w) => w is SizedBox && w.height == 8),
+        );
+        expect(fabGap, hasLength(1));
+
+        final toolbarCenter = tester.getCenter(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Material &&
+                widget.shape is StadiumBorder &&
+                widget.child is ConstrainedBox,
+          ),
+        );
+        final fabCenter = tester.getCenter(find.byType(FloatingActionButton));
+        expect(fabCenter.dy, greaterThan(toolbarCenter.dy));
+      });
+    });
   });
 }
 

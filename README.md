@@ -6,6 +6,7 @@ A Flutter package that provides a Material Design 3 [floating pill-style toolbar
 
 - 🎨 Material Design 3 styling with automatic theming
 - 🎛️ Standard and vibrant color configurations
+- ↔️ Horizontal and vertical layouts
 - 🔘 Support for both icon-only and labeled action buttons
 - ♿ Built-in accessibility with semantic labels, tooltips, and 48dp touch targets
 - 🎯 Optional FloatingActionButton integration
@@ -119,6 +120,39 @@ M3FloatingToolbar(
   ),
 )
 ```
+
+### Vertical layout
+
+Set `direction` to `Axis.vertical` for the vertical floating toolbar
+configuration, typically anchored to a side edge of the screen.
+
+```dart
+M3FloatingToolbar(
+  direction: Axis.vertical,
+  actions: [
+    M3FloatingToolbarAction(
+      icon: Icons.home,
+      semanticLabel: 'Home',
+      tooltip: 'Home',
+      onPressed: () => print('Home pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.explore,
+      semanticLabel: 'Explore',
+      tooltip: 'Explore',
+      onPressed: () => print('Explore pressed'),
+    ),
+    M3FloatingToolbarAction(
+      icon: Icons.person,
+      semanticLabel: 'Profile',
+      tooltip: 'Profile',
+      onPressed: () => print('Profile pressed'),
+    ),
+  ],
+)
+```
+
+When a `floatingActionButton` is provided, it is placed below the toolbar.
 
 ### Color variants
 
