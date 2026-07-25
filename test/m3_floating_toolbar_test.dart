@@ -1130,6 +1130,28 @@ void main() {
       });
     });
 
+    group('label-only actions', () {
+      testWidgets('renders a text button without an icon', (tester) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            label: 'Explore',
+            semanticLabel: 'Explore',
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(body: M3FloatingToolbar(actions: actions)),
+          ),
+        );
+
+        expect(find.text('Explore'), findsOneWidget);
+        expect(find.byType(TextButton), findsOneWidget);
+        expect(find.byType(Icon), findsNothing);
+      });
+    });
+
     group('selected actions', () {
       testWidgets('marks selected actions in the semantics tree', (
         tester,

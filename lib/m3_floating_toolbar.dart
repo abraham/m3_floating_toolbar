@@ -242,21 +242,25 @@ class M3FloatingToolbar extends StatelessWidget {
         ? _selectedContentColor(colorScheme)
         : textColor;
 
-    // If action has a label, use TextButton.icon
+    // If action has a label, use a text button
     if (action.label != null) {
-      final button = TextButton.icon(
-        onPressed: action.onPressed,
-        icon: Icon(action.icon, size: _kIconSize),
-        label: Text(action.label!),
-        style: TextButton.styleFrom(
-          foregroundColor: contentColor,
-          backgroundColor: backgroundColor,
-          // Meets the minimum accessible touch target height.
-          minimumSize: const Size(0, _kMinTouchTargetSize),
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        ),
+      final style = TextButton.styleFrom(
+        foregroundColor: contentColor,
+        backgroundColor: backgroundColor,
+        // Meets the minimum accessible touch target height.
+        minimumSize: const Size(0, _kMinTouchTargetSize),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       );
+      final label = Text(action.label!);
+      final button = action.icon == null
+          ? TextButton(onPressed: action.onPressed, style: style, child: label)
+          : TextButton.icon(
+              onPressed: action.onPressed,
+              icon: Icon(action.icon, size: _kIconSize),
+              label: label,
+              style: style,
+            );
 
       // Wrap in Semantics for accessibility
       return Semantics(

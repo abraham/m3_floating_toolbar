@@ -68,6 +68,16 @@ Widget m3FloatingToolbarEndCenterPreviewWrapper(Widget child) {
 )
 Widget m3FloatingToolbarPreview() => const _M3FloatingToolbarBasicPreview();
 
+/// Preview where every action is labeled and only the selected one adds an
+/// icon.
+@Preview(
+  name: 'M3FloatingToolbar labels with selected icon',
+  size: kPreviewSize,
+  wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+)
+Widget m3FloatingToolbarLabelsPreview() =>
+    const _M3FloatingToolbarBasicPreview(alwaysShowLabels: true);
+
 @Preview(
   name: 'M3FloatingToolbar with FAB',
   size: kPreviewSize,
@@ -282,7 +292,11 @@ Widget m3FloatingToolbarThemeColorsPreview() =>
     const _M3FloatingToolbarThemeColorsPreview();
 
 class _M3FloatingToolbarBasicPreview extends StatefulWidget {
-  const _M3FloatingToolbarBasicPreview();
+  const _M3FloatingToolbarBasicPreview({this.alwaysShowLabels = false});
+
+  /// Whether every action shows its label, with the icon reserved for the
+  /// selected action.
+  final bool alwaysShowLabels;
 
   @override
   State<_M3FloatingToolbarBasicPreview> createState() =>
@@ -305,8 +319,12 @@ class _M3FloatingToolbarBasicPreviewState
       actions: [
         for (var i = 0; i < items.length; i++)
           M3FloatingToolbarAction(
-            icon: items[i].icon,
-            label: i == _selectedIndex ? items[i].label : null,
+            icon: widget.alwaysShowLabels && i != _selectedIndex
+                ? null
+                : items[i].icon,
+            label: widget.alwaysShowLabels || i == _selectedIndex
+                ? items[i].label
+                : null,
             semanticLabel: items[i].label,
             tooltip: items[i].label,
             selected: i == _selectedIndex,
