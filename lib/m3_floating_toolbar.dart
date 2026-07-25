@@ -38,6 +38,50 @@ Widget m3FloatingToolbarEndCenterPreviewWrapper(Widget child) {
   );
 }
 
+/// Basic preview where tapping an action selects it.
+@Preview(
+  name: 'M3FloatingToolbar preview',
+  size: Size(390, 400),
+  wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+)
+Widget m3FloatingToolbarPreview() => const _M3FloatingToolbarBasicPreview();
+
+class _M3FloatingToolbarBasicPreview extends StatefulWidget {
+  const _M3FloatingToolbarBasicPreview();
+
+  @override
+  State<_M3FloatingToolbarBasicPreview> createState() =>
+      _M3FloatingToolbarBasicPreviewState();
+}
+
+class _M3FloatingToolbarBasicPreviewState
+    extends State<_M3FloatingToolbarBasicPreview> {
+  int _selectedIndex = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    const items = [
+      (icon: Icons.home, label: 'Home'),
+      (icon: Icons.explore, label: 'Explore'),
+      (icon: Icons.person, label: 'Profile'),
+    ];
+
+    return M3FloatingToolbar(
+      actions: [
+        for (var i = 0; i < items.length; i++)
+          M3FloatingToolbarAction(
+            icon: items[i].icon,
+            label: i == _selectedIndex ? items[i].label : null,
+            semanticLabel: items[i].label,
+            tooltip: items[i].label,
+            selected: i == _selectedIndex,
+            onPressed: () => setState(() => _selectedIndex = i),
+          ),
+      ],
+    );
+  }
+}
+
 /// Bright seed colors offered by the theme selection preview.
 const List<({String name, Color color})> _kPreviewThemeColors = [
   (name: 'Red', color: Color(0xFFFF1744)),
@@ -290,31 +334,6 @@ class M3FloatingToolbar extends StatelessWidget {
   /// the configured spacing. The FAB maintains its standard appearance
   /// and behavior while being integrated into the toolbar layout.
   final FloatingActionButton? floatingActionButton;
-
-  @Preview(
-    name: 'M3FloatingToolbar preview',
-    size: Size(390, 400),
-    wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
-  )
-  factory M3FloatingToolbar.preview() => M3FloatingToolbar(
-    actions: [
-      M3FloatingToolbarAction(
-        icon: Icons.home,
-        semanticLabel: 'Home',
-        tooltip: 'Home',
-        // ignore: no-empty-block
-        onPressed: () {},
-      ),
-      M3FloatingToolbarAction(
-        icon: Icons.explore,
-        label: 'Explore',
-        semanticLabel: 'Explore',
-        selected: true,
-        // ignore: no-empty-block
-        onPressed: () {},
-      ),
-    ],
-  );
 
   @Preview(
     name: 'M3FloatingToolbar with FAB',
