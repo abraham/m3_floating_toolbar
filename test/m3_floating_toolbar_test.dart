@@ -1130,6 +1130,76 @@ void main() {
       });
     });
 
+    group('selected actions', () {
+      testWidgets('marks selected actions in the semantics tree', (
+        tester,
+      ) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            icon: Icons.home,
+            semanticLabel: 'Home',
+            onPressed: _mockCallback,
+          ),
+          const M3FloatingToolbarAction(
+            icon: Icons.explore,
+            label: 'Explore',
+            semanticLabel: 'Explore',
+            selected: true,
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(body: M3FloatingToolbar(actions: actions)),
+          ),
+        );
+
+        final selected = find.byWidgetPredicate(
+          (widget) =>
+              widget is Semantics &&
+              widget.properties.label == 'Explore' &&
+              widget.properties.selected == true,
+        );
+        expect(selected, findsOneWidget);
+
+        final unselected = find.byWidgetPredicate(
+          (widget) =>
+              widget is Semantics &&
+              widget.properties.label == 'Home' &&
+              widget.properties.selected == false,
+        );
+        expect(unselected, findsOneWidget);
+      });
+
+      testWidgets('applies the selected container color', (tester) async {
+        final actions = [
+          const M3FloatingToolbarAction(
+            icon: Icons.explore,
+            label: 'Explore',
+            semanticLabel: 'Explore',
+            selected: true,
+            onPressed: _mockCallback,
+          ),
+        ];
+
+        final theme = ThemeData.light();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(body: M3FloatingToolbar(actions: actions)),
+          ),
+        );
+
+        final button = tester.widget<TextButton>(find.byType(TextButton));
+        expect(
+          button.style?.backgroundColor?.resolve(<WidgetState>{}),
+          equals(theme.colorScheme.secondaryContainer),
+        );
+      });
+    });
+
     group('vertical direction', () {
       testWidgets('lays actions out in a Column', (tester) async {
         final actions = [
