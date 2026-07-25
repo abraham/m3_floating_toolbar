@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:m3_floating_toolbar/m3_floating_toolbar.dart';
@@ -258,6 +260,18 @@ Widget m3FloatingToolbarVerticalWithFabPreview() => M3FloatingToolbar(
   ),
 );
 
+/// Preview of an email toolbar that moves overflow actions into a menu.
+///
+/// Per the Material Design 3 guidelines, when actions don't fit in a toolbar
+/// the trailing slot holds an overflow menu instead of more buttons.
+@Preview(
+  name: 'M3FloatingToolbar overflow menu',
+  size: kPreviewSize,
+  wrapper: m3FloatingToolbarBottomCenterPreviewWrapper,
+)
+Widget m3FloatingToolbarOverflowMenuPreview() =>
+    const _M3FloatingToolbarOverflowMenuPreview();
+
 /// Preview that themes the toolbar from a selection of bright colors.
 @Preview(
   name: 'M3FloatingToolbar theme colors',
@@ -299,6 +313,97 @@ class _M3FloatingToolbarBasicPreviewState
             onPressed: () => setState(() => _selectedIndex = i),
           ),
       ],
+    );
+  }
+}
+
+/// Email actions shown in the overflow menu of the overflow menu preview.
+const List<({IconData icon, String label})> _kOverflowMenuActions = [
+  (icon: Icons.mark_email_unread_outlined, label: 'Mark as unread'),
+  (icon: Icons.drive_file_move_outlined, label: 'Move to'),
+  (icon: Icons.label_outline, label: 'Label'),
+  (icon: Icons.report_gmailerrorred, label: 'Report spam'),
+];
+
+class _M3FloatingToolbarOverflowMenuPreview extends StatelessWidget {
+  const _M3FloatingToolbarOverflowMenuPreview();
+
+  @override
+  Widget build(BuildContext context) {
+    return M3FloatingToolbar(
+      actions: [
+        M3FloatingToolbarAction(
+          icon: Icons.archive_outlined,
+          semanticLabel: 'Archive',
+          tooltip: 'Archive',
+          // ignore: no-empty-block
+          onPressed: () {},
+        ),
+        M3FloatingToolbarAction(
+          icon: Icons.delete_outline,
+          semanticLabel: 'Delete',
+          tooltip: 'Delete',
+          // ignore: no-empty-block
+          onPressed: () {},
+        ),
+        M3FloatingToolbarAction(
+          icon: Icons.schedule_outlined,
+          semanticLabel: 'Snooze',
+          tooltip: 'Snooze',
+          // ignore: no-empty-block
+          onPressed: () {},
+        ),
+        M3FloatingToolbarAction(
+          icon: Icons.more_vert,
+          semanticLabel: 'More actions',
+          tooltip: 'More actions',
+          onPressed: () => _showOverflowMenu(context),
+        ),
+      ],
+    );
+  }
+
+  void _showOverflowMenu(BuildContext context) {
+    final toolbar = context.findRenderObject()! as RenderBox;
+    final overlay =
+        Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
+    final topRight = toolbar.localToGlobal(
+      toolbar.size.topRight(Offset.zero),
+      ancestor: overlay,
+    );
+    // The menu is rendered in an overlay that doesn't inherit the preview's
+    // theme, so the theme is captured here and reapplied to the menu.
+    final theme = Theme.of(context);
+
+    unawaited(
+      showMenu<String>(
+        context: context,
+        color: theme.colorScheme.surfaceContainer,
+        position: RelativeRect.fromLTRB(
+          topRight.dx,
+          topRight.dy,
+          overlay.size.width - topRight.dx,
+          overlay.size.height - topRight.dy,
+        ),
+        items: [
+          for (final action in _kOverflowMenuActions)
+            PopupMenuItem<String>(
+              value: action.label,
+              child: Row(
+                children: [
+                  Icon(action.icon, color: theme.colorScheme.onSurface),
+                  const SizedBox(width: 12),
+                  Text(
+                    action.label,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
