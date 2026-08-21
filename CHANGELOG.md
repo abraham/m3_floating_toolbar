@@ -1,3 +1,7 @@
+## 0.3.0
+
+* Switch to material_ui package.
+
 ## 0.2.1
 
 * Update docs.
